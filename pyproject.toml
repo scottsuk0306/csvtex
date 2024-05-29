@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "csvtex"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["Scott Suk <scottsuk0306@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">3.9"
+python = ">3.7"
 pandas = "^2.2.2"
 
 
