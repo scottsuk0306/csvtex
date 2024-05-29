@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csvtex"
-version = "1.0.1"
+version = "1.0.2"
 description = ""
 authors = ["Scott Suk <scottsuk0306@gmail.com>"]
 license = "MIT"
