@@ -21,6 +21,19 @@ LABEL = "\n{indent}\\label{{{label}}}"
 CAPTION = "\n{indent}\\caption{{\\footnotesize {caption}}}"
 
 
+def latex_escape(text):
+    latex_special_chars = {
+        "#": r"\#",
+        "$": r"\$",
+        "%": r"\%",
+        "&": r"\&",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+    }
+    return str(text).translate(str.maketrans(latex_special_chars))
+
+
 def create_latex_table(
     file,
     sep=",",
@@ -54,21 +67,12 @@ def create_latex_table(
     df = pd.read_csv(file, sep=sep, header=0 if header else None)
 
     if escape:
-        df = df.map(
-            lambda x: str(x).translate(
-                str.maketrans(
-                    {
-                        "#": r"\#",
-                        "$": r"\$",
-                        "%": r"\%",
-                        "&": r"\&",
-                        "_": r"\_",
-                        "{": r"\{",
-                        "}": r"\}",
-                    }
-                )
-            )
+        df = df.apply(
+            lambda col: col.apply(latex_escape) if col.dtype == object else col
         )
+        if header:
+            df.columns = [latex_escape(col) for col in df.columns]
+
     indent = "" if fragment else "    "
 
     column_format = format_alignment(align, len(df.columns))
@@ -106,7 +110,7 @@ def create_latex_table(
         return "\n".join((table_header, content, table_footer))
     else:
         return content
-    
+
 
 def format_alignment(align, length):
     """Formats the column alignment."""
@@ -126,9 +130,11 @@ def add_label(label, indent):
     return LABEL.format(label=label, indent=indent) if label else ""
 
 
-def add_caption(caption, indent):
+def add_caption(caption, indent, escape=True):
     """Creates a table caption."""
-    return CAPTION.format(caption=caption, indent=indent) if caption else ""
+    if escape:
+        caption = latex_escape(caption)
+    return f"\n{indent}\\caption{{\\footnotesize {caption}}}" if caption else ""
 
 
 def save_latex_table(table, outfile, replace=False):
