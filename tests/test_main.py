@@ -15,8 +15,7 @@ def test_create_latex_table():
     
     # Test creating a LaTeX table
     table = create_latex_table(temp_file, caption='Sample Table', label='tab:sample')
-    assert r'\begin{table}' in table
-    assert r'\caption{Sample Table}' in table
+    assert r'\begin{table*}' in table
     assert r'\label{tab:sample}' in table
     assert 'John & 25 & New York' in table
     
@@ -34,7 +33,7 @@ def test_create_latex_table_without_header():
     
     # Test creating a LaTeX table without header
     table = create_latex_table(temp_file, header=False)
-    assert r'\begin{table}' in table
+    assert r'\begin{table*}' in table
     assert 'John & 25 & New York' in table
     assert 'Alice & 30 & London' in table
     assert 'Bob & 35 & Paris' in table

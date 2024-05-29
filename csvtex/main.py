@@ -2,19 +2,23 @@ import pandas as pd
 
 PREAMBLE = r"""\documentclass[11pt, a4paper]{article}
 \usepackage{booktabs}
+\usepackage{graphicx}
 \begin{document}"""
 
-HEADER = r"""\begin{{table}}[htb]
-{indent}\centering{caption}{label}
+HEADER = r"""\begin{{table*}}[htb]
+{indent}\centering
 {indent}\begin{{tabular}}{{@{{}}{align}@{{}}}}
 {indent}{indent}\toprule"""
 
 FOOTER = r"""{indent}{indent}\bottomrule
 {indent}\end{{tabular}}
-\end{{table}}"""
+{indent}}}
+{caption}
+{label}
+\end{{table*}}"""
 
 LABEL = "\n{indent}\\label{{{label}}}"
-CAPTION = "\n{indent}\\caption{{{caption}}}"
+CAPTION = "\n{indent}\\caption{{\\footnotesize {caption}}}"
 
 
 def create_latex_table(
@@ -91,12 +95,14 @@ def create_latex_table(
 
     if not fragment:
         table_header = HEADER.format(
-            label=add_label(label, indent),
-            caption=add_caption(caption, indent),
             align=column_format,
             indent=indent,
         )
-        table_footer = FOOTER.format(indent=indent)
+        table_footer = FOOTER.format(
+            caption=add_caption(caption, indent),
+            label=add_label(label, indent),
+            indent=indent,
+        )
         return "\n".join((table_header, content, table_footer))
     else:
         return content
