@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "csvtex"
 version = "1.0.3"
-description = ""
+description = "Convert CSV Files to LaTeX Tables"
 authors = ["Scott Suk <scottsuk0306@gmail.com>"]
 license = "MIT"
 readme = "README.md"
