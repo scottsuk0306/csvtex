@@ -83,7 +83,17 @@ def create_latex_table(
     else:
         header_row = " & ".join([""] * len(df.columns)) + r" \\"
 
-    rows = [" & ".join(map(str, row)) + r" \\" for _, row in df.iterrows()]
+    if float_format:
+        rows = [
+            " & ".join(
+                format(val, float_format) if isinstance(val, (int, float)) else str(val)
+                for val in row
+            )
+            + r" \\"
+            for _, row in df.iterrows()
+        ]
+    else:
+        rows = [" & ".join(map(str, row)) + r" \\" for _, row in df.iterrows()]
 
     if units:
         units_row = (
@@ -97,15 +107,6 @@ def create_latex_table(
         rows.insert(1, indent + indent + r"\midrule")
 
     content = "\n".join(indent + indent + row for row in rows)
-    
-    if float_format:
-        rows = [
-            " & ".join(format(val, float_format) for val in row) + r" \\"
-            for _, row in df.iterrows()
-        ]
-    else:
-        rows = [" & ".join(map(str, row)) + r" \\" for _, row in df.iterrows()]
-
 
     if not fragment:
         table_header = HEADER.format(
@@ -120,7 +121,6 @@ def create_latex_table(
         return "\n".join((table_header, content, table_footer))
     else:
         return content
-
 
 def format_alignment(align, length):
     """Formats the column alignment."""
