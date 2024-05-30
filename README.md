@@ -40,7 +40,7 @@ For more detailed usage and examples, please refer to the [documentation](https:
 - 🚫 Automatically escape special LaTeX characters
 - 📜 Generate complete LaTeX documents with multiple tables
 - 🌐 Support for different CSV separators (comma, semicolon, tab)
-- 🐍 Compatible with Python 3.6+
+- 🐍 Compatible with Python 3.8+
 
 ## 🤝 Contributing
 
