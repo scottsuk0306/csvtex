@@ -12,7 +12,6 @@ HEADER = r"""\begin{{table*}}[htb]
 
 FOOTER = r"""{indent}{indent}\bottomrule
 {indent}\end{{tabular}}
-{indent}}}
 {caption}
 {label}
 \end{{table*}}"""
@@ -45,6 +44,7 @@ def create_latex_table(
     fragment=False,
     header=True,
     index=False,
+    float_format=None,
 ):
     """
     Creates a LaTeX table from a CSV file.
@@ -60,6 +60,7 @@ def create_latex_table(
         fragment (bool): Whether to output only the tabular environment. Default: False.
         header (bool): Whether the first row is a header. Default: True.
         index (bool): Whether to include the DataFrame index in the table. Default: False.
+        float_format (str): Format specifier for floating-point numbers. Default: None.
 
     Returns:
         str: LaTeX code for the table.
@@ -96,6 +97,15 @@ def create_latex_table(
         rows.insert(1, indent + indent + r"\midrule")
 
     content = "\n".join(indent + indent + row for row in rows)
+    
+    if float_format:
+        rows = [
+            " & ".join(format(val, float_format) for val in row) + r" \\"
+            for _, row in df.iterrows()
+        ]
+    else:
+        rows = [" & ".join(map(str, row)) + r" \\" for _, row in df.iterrows()]
+
 
     if not fragment:
         table_header = HEADER.format(
